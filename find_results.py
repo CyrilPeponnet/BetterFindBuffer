@@ -89,13 +89,19 @@ def plugin_loaded():
     if not os.path.exists(default_package_path):
         os.makedirs(default_package_path)
 
-    source_path = os.path.join(sublime.packages_path(), "BetterFindBuffer", "Find Results.hidden-tmLanguage")
+    settings = sublime.load_settings('Find Results.sublime-settings')
+    language_scheme = settings.get('language_scheme')
+    if language_scheme:
+        source_path = os.path.join(sublime.packages_path(), language_scheme)
+    else:
+        source_path = os.path.join(sublime.packages_path(), "BetterFindBuffer", "Find Results.hidden-tmLanguage")
+
     destination_path = os.path.join(default_package_path, "Find Results.hidden-tmLanguage")
 
     if os.path.isfile(destination_path):
         os.unlink(destination_path)
 
-    shutil.copy(source_path, default_package_path)
+    shutil.copy(source_path, destination_path)
 
 
 def plugin_unloaded():
